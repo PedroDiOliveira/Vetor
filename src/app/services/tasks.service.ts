@@ -38,7 +38,7 @@ export class TasksService {
           return {
             id: d.id,
             title: data.title ?? '',
-            area: data.area ?? 'disponivel',
+            area: data.area ?? 'desenvolvimento',
             assigneeIds: Array.isArray(data.assigneeIds) ? data.assigneeIds : [],
             createdAt: data.createdAt ?? 0,
             completedAt: data.completedAt ?? null

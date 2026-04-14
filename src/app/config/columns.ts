@@ -12,11 +12,10 @@ export const COLUMNS: BoardColumn[] = [
   { id: 'infra',           name: 'Infra',           icon: 'lucideServer',     color: '#10B981', cssVar: '--col-infra' },
   { id: 'estudo',          name: 'Estudo',          icon: 'lucideBookOpen',   color: '#8B5CF6', cssVar: '--col-estudo' },
   { id: 'suporte',         name: 'Suporte',         icon: 'lucideHeadphones', color: '#F97316', cssVar: '--col-suporte' },
-  { id: 'gestao',          name: 'Gestão',          icon: 'lucideLayers',     color: '#06B6D4', cssVar: '--col-gestao' },
-  { id: 'disponivel',      name: 'Disponível',      icon: 'lucideCircle',     color: '#6B7280', cssVar: '--col-disponivel' }
+  { id: 'gestao',          name: 'Gestão',          icon: 'lucideLayers',     color: '#06B6D4', cssVar: '--col-gestao' }
 ];
 
-export const DEFAULT_COLUMN = 'disponivel';
+export const DEFAULT_COLUMN = 'desenvolvimento';
 
 export function getColumn(id: string): BoardColumn {
   return COLUMNS.find((c) => c.id === id) ?? COLUMNS[COLUMNS.length - 1];

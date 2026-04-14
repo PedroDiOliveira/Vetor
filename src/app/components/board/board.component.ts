@@ -53,6 +53,7 @@ export class BoardComponent implements OnInit {
   readonly selectedTask = signal<Task | null>(null);
   readonly showAddTask = signal(false);
   readonly showAddMember = signal(false);
+  readonly showMenu = signal(false);
   readonly firestoreError = this.tasksService.firestoreError;
 
   ngOnInit(): void {

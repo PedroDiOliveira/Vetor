@@ -16,7 +16,7 @@ export class AddTaskModalComponent {
   readonly close = output<void>();
 
   readonly title = signal('');
-  readonly selectedArea = signal('disponivel');
+  readonly selectedArea = signal('desenvolvimento');
   readonly columns: BoardColumn[] = COLUMNS;
 
   onBackdrop(event: MouseEvent): void {
@@ -28,6 +28,6 @@ export class AddTaskModalComponent {
     if (!trimmed) return;
     this.confirm.emit({ title: trimmed, area: this.selectedArea() });
     this.title.set('');
-    this.selectedArea.set('disponivel');
+    this.selectedArea.set('desenvolvimento');
   }
 }
