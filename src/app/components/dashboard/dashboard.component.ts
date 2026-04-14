@@ -40,7 +40,7 @@ export class DashboardComponent {
     return this.tasksService.done().filter((t2) => (t2.completedAt ?? 0) >= t).length;
   });
 
-  readonly topContribuidor = computed(() => {
+  readonly podium = computed(() => {
     const t = startOf('week');
     const done = this.tasksService.done().filter((t2) => (t2.completedAt ?? 0) >= t);
     const count: Record<string, number> = {};
@@ -49,12 +49,13 @@ export class DashboardComponent {
         count[id] = (count[id] ?? 0) + 1;
       }
     }
-    let topId = '';
-    let max = 0;
-    for (const [id, n] of Object.entries(count)) {
-      if (n > max) { max = n; topId = id; }
-    }
-    const member = topId ? this.membersService.byId(topId) : undefined;
-    return member ? { name: member.name, avatar: member.avatar, count: max } : null;
+    return Object.entries(count)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([id, n], i) => {
+        const member = this.membersService.byId(id);
+        return member ? { rank: i + 1, name: member.name, avatar: member.avatar, count: n } : null;
+      })
+      .filter((x): x is NonNullable<typeof x> => x !== null);
   });
 }

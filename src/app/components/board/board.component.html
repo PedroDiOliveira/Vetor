@@ -2,13 +2,8 @@
   <!-- Topbar -->
   <header class="topbar">
     <div class="brand">
-      <div class="logo">
-        <ng-icon name="lucideLayoutDashboard" size="14" />
-      </div>
-      <div>
-        <h1>Team Board</h1>
-        <p class="sub">Vetor · {{ tasks().length }} <span>tarefas</span></p>
-      </div>
+      <h1 class="wordmark">Vetor</h1>
+      <span class="task-count">{{ tasks().length }}</span>
     </div>
     <div class="actions">
       <button type="button" class="ghost" (click)="addTask()">
@@ -20,6 +15,17 @@
       </button>
     </div>
   </header>
+
+  <!-- Erro Firestore -->
+  @if (firestoreError(); as err) {
+    <div class="firestore-error">
+      <ng-icon name="lucideX" size="14" />
+      <span>Firestore: {{ err }}</span>
+      <button type="button" (click)="firestoreError.set(null)">
+        <ng-icon name="lucideX" size="12" />
+      </button>
+    </div>
+  }
 
   <!-- Dashboard strip -->
   <app-dashboard />

@@ -18,13 +18,22 @@
     <span class="label">Este mês</span>
   </div>
 
-  @if (topContribuidor(); as top) {
+  @if (podium().length > 0) {
     <div class="divider"></div>
-    <div class="stat top">
-      <div class="avatar">{{ top.avatar }}</div>
-      <div>
-        <span class="num small">{{ top.name }}</span>
-        <span class="label">{{ top.count }} concluída{{ top.count !== 1 ? 's' : '' }} na semana</span>
+
+    <div class="podium-wrap">
+      <span class="podium-label">Semana</span>
+      <div class="podium">
+        @for (entry of podium(); track entry.rank) {
+          <div class="podium-entry">
+            <span class="rank" [class]="'rank-' + entry.rank">{{ entry.rank }}</span>
+            <div class="avatar">{{ entry.avatar }}</div>
+            <div class="info">
+              <span class="pname">{{ entry.name }}</span>
+              <span class="pcount">{{ entry.count }} concluída{{ entry.count !== 1 ? 's' : '' }}</span>
+            </div>
+          </div>
+        }
       </div>
     </div>
   }

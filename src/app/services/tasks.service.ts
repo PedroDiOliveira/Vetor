@@ -21,6 +21,7 @@ export class TasksService {
   readonly tasks = signal<Task[]>([]);
   readonly active = computed(() => this.tasks().filter((t) => !t.completedAt));
   readonly done = computed(() => this.tasks().filter((t) => !!t.completedAt));
+  readonly firestoreError = signal<string | null>(null);
 
   private subscribed = false;
 
@@ -31,6 +32,7 @@ export class TasksService {
     onSnapshot(
       q,
       (snap) => {
+        this.firestoreError.set(null);
         const items: Task[] = snap.docs.map((d) => {
           const data = d.data() as Partial<Task>;
           return {
@@ -44,32 +46,47 @@ export class TasksService {
         });
         this.tasks.set(items);
       },
-      (err) => console.error('[Vetor] Erro ao escutar tarefas:', err)
+      (err) => {
+        console.error('[Vetor] Firestore erro:', err);
+        this.firestoreError.set(err.message ?? 'Erro ao conectar ao Firestore.');
+      }
     );
   }
 
   async add(title: string, area: string): Promise<void> {
     const trimmed = title.trim();
     if (!trimmed) return;
-    await addDoc(this.col, {
-      title: trimmed,
-      area,
-      assigneeIds: [],
-      createdAt: Date.now(),
-      completedAt: null
-    });
+    try {
+      await addDoc(this.col, {
+        title: trimmed,
+        area,
+        assigneeIds: [],
+        createdAt: Date.now(),
+        completedAt: null
+      });
+    } catch (err: unknown) {
+      this.handleWriteError('add task', err);
+    }
   }
 
   async updateTitle(id: string, title: string): Promise<void> {
     const trimmed = title.trim();
     if (!trimmed) return;
     this.patch(id, { title: trimmed });
-    await updateDoc(doc(this.col, id), { title: trimmed });
+    try {
+      await updateDoc(doc(this.col, id), { title: trimmed });
+    } catch (err: unknown) {
+      this.handleWriteError('updateTitle', err);
+    }
   }
 
   async updateArea(id: string, area: string): Promise<void> {
     this.patch(id, { area });
-    await updateDoc(doc(this.col, id), { area });
+    try {
+      await updateDoc(doc(this.col, id), { area });
+    } catch (err: unknown) {
+      this.handleWriteError('updateArea', err);
+    }
   }
 
   async addAssignee(taskId: string, memberId: string): Promise<boolean> {
@@ -79,7 +96,11 @@ export class TasksService {
     if (task.assigneeIds.length >= MAX_ASSIGNEES) return false;
     const next = [...task.assigneeIds, memberId];
     this.patch(taskId, { assigneeIds: next });
-    await updateDoc(doc(this.col, taskId), { assigneeIds: next });
+    try {
+      await updateDoc(doc(this.col, taskId), { assigneeIds: next });
+    } catch (err: unknown) {
+      this.handleWriteError('addAssignee', err);
+    }
     return true;
   }
 
@@ -88,7 +109,11 @@ export class TasksService {
     if (!task) return;
     const next = task.assigneeIds.filter((id) => id !== memberId);
     this.patch(taskId, { assigneeIds: next });
-    await updateDoc(doc(this.col, taskId), { assigneeIds: next });
+    try {
+      await updateDoc(doc(this.col, taskId), { assigneeIds: next });
+    } catch (err: unknown) {
+      this.handleWriteError('removeAssignee', err);
+    }
   }
 
   async moveAssignee(fromTaskId: string, toTaskId: string, memberId: string): Promise<boolean> {
@@ -109,40 +134,50 @@ export class TasksService {
       })
     );
 
-    const batch = writeBatch(this.firebase.db);
-    const fromDoc = doc(this.col, fromTaskId);
-    const toDoc = doc(this.col, toTaskId);
-    const from = this.tasks().find((t) => t.id === fromTaskId)!;
-    batch.update(fromDoc, { assigneeIds: from.assigneeIds });
-    batch.update(toDoc, { assigneeIds: this.tasks().find((t) => t.id === toTaskId)!.assigneeIds });
-    await batch.commit();
+    try {
+      const batch = writeBatch(this.firebase.db);
+      const fromSnap = this.tasks().find((t) => t.id === fromTaskId)!;
+      const toSnap = this.tasks().find((t) => t.id === toTaskId)!;
+      batch.update(doc(this.col, fromTaskId), { assigneeIds: fromSnap.assigneeIds });
+      batch.update(doc(this.col, toTaskId), { assigneeIds: toSnap.assigneeIds });
+      await batch.commit();
+    } catch (err: unknown) {
+      this.handleWriteError('moveAssignee', err);
+    }
     return true;
   }
 
   async complete(id: string): Promise<void> {
     const ts = Date.now();
     this.patch(id, { completedAt: ts });
-    await updateDoc(doc(this.col, id), { completedAt: ts });
+    try {
+      await updateDoc(doc(this.col, id), { completedAt: ts });
+    } catch (err: unknown) {
+      this.handleWriteError('complete', err);
+    }
   }
 
   async reopen(id: string): Promise<void> {
     this.patch(id, { completedAt: null });
-    await updateDoc(doc(this.col, id), { completedAt: null });
+    try {
+      await updateDoc(doc(this.col, id), { completedAt: null });
+    } catch (err: unknown) {
+      this.handleWriteError('reopen', err);
+    }
   }
 
   async remove(id: string): Promise<void> {
     this.tasks.update((list) => list.filter((t) => t.id !== id));
-    await deleteDoc(doc(this.col, id));
+    try {
+      await deleteDoc(doc(this.col, id));
+    } catch (err: unknown) {
+      this.handleWriteError('remove', err);
+    }
   }
 
   async purgeAssignee(memberId: string): Promise<void> {
     const affected = this.tasks().filter((t) => t.assigneeIds.includes(memberId));
     if (!affected.length) return;
-    const batch = writeBatch(this.firebase.db);
-    for (const t of affected) {
-      const next = t.assigneeIds.filter((id) => id !== memberId);
-      batch.update(doc(this.col, t.id), { assigneeIds: next });
-    }
     this.tasks.update((list) =>
       list.map((t) =>
         t.assigneeIds.includes(memberId)
@@ -150,12 +185,27 @@ export class TasksService {
           : t
       )
     );
-    await batch.commit();
+    try {
+      const batch = writeBatch(this.firebase.db);
+      for (const t of affected) {
+        const next = t.assigneeIds.filter((id) => id !== memberId);
+        batch.update(doc(this.col, t.id), { assigneeIds: next });
+      }
+      await batch.commit();
+    } catch (err: unknown) {
+      this.handleWriteError('purgeAssignee', err);
+    }
   }
 
   private patch(id: string, changes: Partial<Task>): void {
     this.tasks.update((list) =>
       list.map((t) => (t.id === id ? { ...t, ...changes } : t))
     );
+  }
+
+  private handleWriteError(op: string, err: unknown): void {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`[Vetor] Firestore erro em ${op}:`, msg);
+    this.firestoreError.set(`Erro ao salvar (${op}): ${msg}`);
   }
 }
