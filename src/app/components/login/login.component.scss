@@ -1,0 +1,134 @@
+:host { display: block; height: 100vh; }
+
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background:
+    radial-gradient(ellipse at top, rgba(59, 130, 246, 0.06), transparent 50%),
+    radial-gradient(ellipse at bottom, rgba(139, 92, 246, 0.04), transparent 50%),
+    var(--bg);
+}
+
+.card {
+  width: 360px;
+  padding: 40px 32px;
+  animation: fadeInUp 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 36px;
+
+  .logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+    display: grid;
+    place-items: center;
+    color: white;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25);
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    color: var(--text-faint);
+    font-size: 12px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 14px;
+  height: 44px;
+  transition: border-color 150ms, background 150ms;
+
+  &:focus-within {
+    border-color: var(--border-strong);
+    background: var(--card);
+  }
+
+  &.error {
+    border-color: rgba(239, 68, 68, 0.5);
+  }
+
+  .field-icon {
+    color: var(--text-faint);
+    margin-right: 10px;
+  }
+
+  input {
+    flex: 1;
+    height: 100%;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+  }
+}
+
+.primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  border-radius: var(--radius);
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 500;
+  font-size: 14px;
+  transition: opacity 150ms, transform 150ms;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.99);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .spin {
+    animation: spin 700ms linear infinite;
+  }
+}
+
+.error-msg {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 12px;
+  color: #EF4444;
+  animation: fadeIn 200ms;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

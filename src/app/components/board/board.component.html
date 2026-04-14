@@ -1,0 +1,51 @@
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <ng-icon name="lucideArrowRight" size="14" />
+      </div>
+      <div>
+        <h1>Team Board</h1>
+        <p class="sub">Vetor · {{ members().length }} <span>membros</span></p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="ghost" (click)="addMember()">
+        <ng-icon name="lucideUserPlus" size="14" />
+        <span>Membro</span>
+      </button>
+      <button type="button" class="icon-btn" (click)="logout()" title="Sair">
+        <ng-icon name="lucideLogOut" size="16" />
+      </button>
+    </div>
+  </header>
+
+  <main class="board">
+    @if (loading()) {
+      <div class="loading">
+        <ng-icon name="lucideLoader" size="18" class="spin" />
+        <span>Carregando board…</span>
+      </div>
+    } @else {
+      @for (col of columns; track col.id) {
+        <app-column
+          [column]="col"
+          [members]="membersOf(col.id)"
+          [connectedTo]="columnIds"
+          (dropped)="onDropped(col.id, $event)"
+          (memberClicked)="onMemberClick($event)"
+        />
+      }
+    }
+  </main>
+
+  @if (selected(); as m) {
+    <app-member-modal
+      [member]="m"
+      (close)="closeModal()"
+      (save)="saveDescription($event)"
+      (remove)="removeMember($event)"
+    />
+  }
+</div>

@@ -1,0 +1,37 @@
+<main class="login">
+  <section class="card">
+    <div class="brand">
+      <div class="logo">
+        <ng-icon name="lucideArrowRight" size="20" />
+      </div>
+      <h1>Vetor</h1>
+      <p>Team Board</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="field" [class.error]="error()">
+        <ng-icon name="lucideLock" size="16" class="field-icon" />
+        <input
+          type="password"
+          placeholder="senha do board"
+          [value]="password()"
+          (input)="onInput($any($event.target).value)"
+          autofocus
+        />
+      </div>
+
+      <button type="submit" class="primary" [disabled]="!password() || submitting()">
+        @if (submitting()) {
+          <ng-icon name="lucideLoader" size="16" class="spin" />
+        } @else {
+          <span>Entrar</span>
+          <ng-icon name="lucideArrowRight" size="16" />
+        }
+      </button>
+    </form>
+
+    @if (error()) {
+      <p class="error-msg">Senha incorreta</p>
+    }
+  </section>
+</main>
