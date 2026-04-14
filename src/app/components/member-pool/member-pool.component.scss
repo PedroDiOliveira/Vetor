@@ -79,6 +79,12 @@
 
   &:active { cursor: grabbing; }
 
+  &.busy {
+    border-color: var(--border-strong);
+
+    .name { color: var(--text); }
+  }
+
   .name {
     font-size: 12px;
     font-weight: 500;

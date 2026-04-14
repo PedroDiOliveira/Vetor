@@ -72,7 +72,7 @@ export class BoardComponent implements OnInit {
     this.tasksService.updateArea(task.id, targetAreaId);
   }
 
-  // ── Assignee drag (pool ↔ task ↔ task) ───────────────────────────
+  // ── Assignee drag (pool → task, task → task, task → pool) ───────
   onAssigneeDropped(targetTaskId: string | null, event: CdkDragDrop<unknown>): void {
     const data = event.item.data as AssigneeDragData;
     if (!data || data.kind !== 'member') return;
@@ -80,18 +80,13 @@ export class BoardComponent implements OnInit {
     const { memberId, fromTaskId } = data;
 
     if (!targetTaskId) {
-      // Drop no pool → remove da tarefa de origem
+      // Drop no pool → desaloca da tarefa de origem
       if (fromTaskId) this.tasksService.removeAssignee(fromTaskId, memberId);
       return;
     }
 
-    if (fromTaskId === targetTaskId) return;
-
-    if (fromTaskId) {
-      this.tasksService.moveAssignee(fromTaskId, targetTaskId, memberId);
-    } else {
-      this.tasksService.addAssignee(targetTaskId, memberId);
-    }
+    // Drop em tarefa → apenas adiciona; pessoa pode estar em múltiplas tarefas
+    this.tasksService.addAssignee(targetTaskId, memberId);
   }
 
   // ── Modal ─────────────────────────────────────────────────────────

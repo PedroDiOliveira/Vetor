@@ -1,21 +1,21 @@
 <div class="pool-bar">
   <div class="label">
     <ng-icon name="lucideUsers" size="13" />
-    <span>Disponíveis</span>
-    <span class="count">{{ free().length }}</span>
+    <span>Equipe</span>
+    <span class="count">{{ members().length }}</span>
   </div>
 
   <div
     class="chips"
     cdkDropList
     [id]="poolId"
-    [cdkDropListData]="free()"
+    [cdkDropListData]="members()"
     [cdkDropListConnectedTo]="connectedTo()"
     cdkDropListOrientation="horizontal"
     (cdkDropListDropped)="assigneeDropped.emit($event)"
   >
-    @for (m of free(); track m.id) {
-      <div class="chip-wrap" cdkDrag [cdkDragData]="buildDragData(m.id)">
+    @for (m of members(); track m.id) {
+      <div class="chip-wrap" [class.busy]="busyIds().has(m.id)" cdkDrag [cdkDragData]="buildDragData(m.id)">
         <app-assignee-chip [member]="m" size="md" />
         <span class="name">{{ m.name }}</span>
         <button
@@ -28,7 +28,7 @@
         </button>
       </div>
     } @empty {
-      <span class="hint">Todos alocados</span>
+      <span class="hint">Nenhum membro</span>
     }
   </div>
 

@@ -116,37 +116,6 @@ export class TasksService {
     }
   }
 
-  async moveAssignee(fromTaskId: string, toTaskId: string, memberId: string): Promise<boolean> {
-    if (fromTaskId === toTaskId) return true;
-    const to = this.tasks().find((t) => t.id === toTaskId);
-    if (!to) return false;
-    if (to.assigneeIds.includes(memberId)) {
-      await this.removeAssignee(fromTaskId, memberId);
-      return true;
-    }
-    if (to.assigneeIds.length >= MAX_ASSIGNEES) return false;
-
-    this.tasks.update((list) =>
-      list.map((t) => {
-        if (t.id === fromTaskId) return { ...t, assigneeIds: t.assigneeIds.filter((id) => id !== memberId) };
-        if (t.id === toTaskId) return { ...t, assigneeIds: [...t.assigneeIds, memberId] };
-        return t;
-      })
-    );
-
-    try {
-      const batch = writeBatch(this.firebase.db);
-      const fromSnap = this.tasks().find((t) => t.id === fromTaskId)!;
-      const toSnap = this.tasks().find((t) => t.id === toTaskId)!;
-      batch.update(doc(this.col, fromTaskId), { assigneeIds: fromSnap.assigneeIds });
-      batch.update(doc(this.col, toTaskId), { assigneeIds: toSnap.assigneeIds });
-      await batch.commit();
-    } catch (err: unknown) {
-      this.handleWriteError('moveAssignee', err);
-    }
-    return true;
-  }
-
   async complete(id: string): Promise<void> {
     const ts = Date.now();
     this.patch(id, { completedAt: ts });

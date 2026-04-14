@@ -29,12 +29,14 @@ export class MemberPoolComponent {
 
   readonly poolId = POOL_DROP_ID;
 
-  readonly free = computed<Member[]>(() => {
-    const assigned = new Set<string>();
+  readonly members = computed<Member[]>(() => this.membersService.members());
+
+  readonly busyIds = computed<Set<string>>(() => {
+    const ids = new Set<string>();
     for (const t of this.tasksService.active()) {
-      for (const id of t.assigneeIds) assigned.add(id);
+      for (const id of t.assigneeIds) ids.add(id);
     }
-    return this.membersService.members().filter((m) => !assigned.has(m.id));
+    return ids;
   });
 
   buildDragData(memberId: string): AssigneeDragData {
