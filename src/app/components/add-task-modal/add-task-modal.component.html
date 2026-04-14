@@ -1,0 +1,55 @@
+<div class="overlay" (click)="onBackdrop($event)">
+  <section class="modal">
+    <header>
+      <div class="icon-wrap">
+        <ng-icon name="lucideFlag" size="16" />
+      </div>
+      <div>
+        <h2>Nova tarefa</h2>
+        <p>Adicionar ao board</p>
+      </div>
+      <button type="button" class="icon-btn" (click)="close.emit()" title="Fechar">
+        <ng-icon name="lucideX" size="16" />
+      </button>
+    </header>
+
+    <form (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="body">
+        <label>Título</label>
+        <div class="field">
+          <input
+            type="text"
+            placeholder="Descreva a tarefa com clareza"
+            [value]="title()"
+            (input)="title.set($any($event.target).value)"
+            autofocus
+          />
+        </div>
+
+        <label class="mt">Área inicial</label>
+        <div class="area-grid">
+          @for (c of columns; track c.id) {
+            <button
+              type="button"
+              class="area-option"
+              [class.active]="selectedArea() === c.id"
+              [style.--accent]="c.color"
+              (click)="selectedArea.set(c.id)"
+            >
+              <ng-icon [name]="c.icon" size="13" />
+              <span>{{ c.name }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <footer>
+        <button type="button" class="ghost" (click)="close.emit()">Cancelar</button>
+        <button type="submit" class="primary" [disabled]="!title().trim()">
+          <ng-icon name="lucidePlus" size="14" />
+          <span>Criar tarefa</span>
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>

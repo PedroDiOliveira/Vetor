@@ -60,4 +60,20 @@
       (toggleAssignee)="toggleAssignee($event)"
     />
   }
+
+  <!-- Add task modal -->
+  @if (showAddTask()) {
+    <app-add-task-modal
+      (confirm)="confirmAddTask($event)"
+      (close)="showAddTask.set(false)"
+    />
+  }
+
+  <!-- Add member modal -->
+  @if (showAddMember()) {
+    <app-add-member-modal
+      (confirm)="confirmAddMember($event)"
+      (close)="showAddMember.set(false)"
+    />
+  }
 </div>

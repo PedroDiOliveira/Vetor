@@ -1,0 +1,41 @@
+<div class="overlay" (click)="onBackdrop($event)">
+  <section class="modal">
+    <header>
+      <div class="icon-wrap">
+        <ng-icon name="lucideUserPlus" size="16" />
+      </div>
+      <div>
+        <h2>Novo membro</h2>
+        <p>Adicionar à equipe</p>
+      </div>
+      <button type="button" class="icon-btn" (click)="close.emit()" title="Fechar">
+        <ng-icon name="lucideX" size="16" />
+      </button>
+    </header>
+
+    <form (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="body">
+        <label>Nome</label>
+        <div class="field">
+          <ng-icon name="lucideUsers" size="15" class="field-icon" />
+          <input
+            #input
+            type="text"
+            placeholder="Ex: Pedro Di Oliveira"
+            [value]="name()"
+            (input)="name.set($any($event.target).value)"
+            autofocus
+          />
+        </div>
+      </div>
+
+      <footer>
+        <button type="button" class="ghost" (click)="close.emit()">Cancelar</button>
+        <button type="submit" class="primary" [disabled]="!name().trim()">
+          <ng-icon name="lucidePlus" size="14" />
+          <span>Adicionar</span>
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>

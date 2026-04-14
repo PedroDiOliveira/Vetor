@@ -12,12 +12,14 @@ import { ColumnComponent } from '../column/column.component';
 import { TaskModalComponent } from '../task-modal/task-modal.component';
 import { MemberPoolComponent, POOL_DROP_ID } from '../member-pool/member-pool.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { AddTaskModalComponent } from '../add-task-modal/add-task-modal.component';
+import { AddMemberModalComponent } from '../add-member-modal/add-member-modal.component';
 import { AssigneeDragData } from '../task-card/task-card.component';
 
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [NgIconComponent, ColumnComponent, TaskModalComponent, MemberPoolComponent, DashboardComponent],
+  imports: [NgIconComponent, ColumnComponent, TaskModalComponent, MemberPoolComponent, DashboardComponent, AddTaskModalComponent, AddMemberModalComponent],
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -49,6 +51,8 @@ export class BoardComponent implements OnInit {
   });
 
   readonly selectedTask = signal<Task | null>(null);
+  readonly showAddTask = signal(false);
+  readonly showAddMember = signal(false);
 
   ngOnInit(): void {
     this.membersService.start();
@@ -133,16 +137,17 @@ export class BoardComponent implements OnInit {
   }
 
   // ── Header actions ────────────────────────────────────────────────
-  addTask(): void {
-    const title = prompt('Título da nova tarefa:')?.trim();
-    if (!title) return;
-    this.tasksService.add(title, 'disponivel');
+  addTask(): void { this.showAddTask.set(true); }
+  addMember(): void { this.showAddMember.set(true); }
+
+  confirmAddTask(data: { title: string; area: string }): void {
+    this.tasksService.add(data.title, data.area);
+    this.showAddTask.set(false);
   }
 
-  addMember(): void {
-    const name = prompt('Nome do novo membro:')?.trim();
-    if (!name) return;
+  confirmAddMember(name: string): void {
     this.membersService.add(name);
+    this.showAddMember.set(false);
   }
 
   async removeMember(member: Member): Promise<void> {
