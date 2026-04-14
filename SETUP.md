@@ -74,7 +74,21 @@ A tela de login pede a senha definida em `boardPassword` no `src/environments/en
    - **Framework Preset:** Other
    - **Build Command:** `npm run build`
    - **Output Directory:** `dist/vetor/browser`
-5. Clique em **Deploy**. Pronto — você terá uma URL pública (`https://vetor-xxx.vercel.app`).
+5. Antes de clicar em Deploy, vá em **Environment Variables** e cadastre:
+
+   | Nome | Valor |
+   |---|---|
+   | `FIREBASE_API_KEY` | da `firebaseConfig` |
+   | `FIREBASE_AUTH_DOMAIN` | da `firebaseConfig` |
+   | `FIREBASE_PROJECT_ID` | da `firebaseConfig` |
+   | `FIREBASE_STORAGE_BUCKET` | da `firebaseConfig` |
+   | `FIREBASE_MESSAGING_SENDER_ID` | da `firebaseConfig` |
+   | `FIREBASE_APP_ID` | da `firebaseConfig` |
+   | `BOARD_PASSWORD` | a senha do board |
+
+   Aplique em todos os ambientes (Production, Preview, Development). O build roda [scripts/generate-env.js](scripts/generate-env.js) antes do `ng build` e gera o `environment.ts` a partir dessas variáveis.
+
+6. Clique em **Deploy**. Pronto — você terá uma URL pública (`https://vetor-xxx.vercel.app`).
 
 > Cada push na branch principal dispara um novo deploy automaticamente.
 
