@@ -6,6 +6,14 @@
       <span class="task-count">{{ tasks().length }}</span>
     </div>
     <div class="actions">
+      <a class="ghost" routerLink="/historico" title="Histórico de tarefas">
+        <ng-icon name="lucideCheckCircle" size="14" />
+        <span>Histórico</span>
+      </a>
+      <button type="button" class="ghost" (click)="addMember()">
+        <ng-icon name="lucideUserPlus" size="14" />
+        <span>Membro</span>
+      </button>
       <button type="button" class="ghost" (click)="addTask()">
         <ng-icon name="lucidePlus" size="14" />
         <span>Tarefa</span>
@@ -34,7 +42,6 @@
   <app-member-pool
     [connectedTo]="poolAndTaskIds()"
     (assigneeDropped)="onAssigneeDropped(null, $event)"
-    (addMember)="addMember()"
     (removeMember)="removeMember($event)"
   />
 

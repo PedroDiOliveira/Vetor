@@ -1,0 +1,59 @@
+<div class="page">
+  <header class="topbar">
+    <button type="button" class="back-btn" (click)="goBack()" title="Voltar ao board">
+      <ng-icon name="lucideArrowRight" class="flip" size="16" />
+      <span>Voltar</span>
+    </button>
+    <div class="heading">
+      <h1>Histórico</h1>
+      <span class="count">{{ entries().length }} tarefas concluídas</span>
+    </div>
+  </header>
+
+  <main class="content">
+    @if (entries().length === 0) {
+      <div class="empty">
+        <ng-icon name="lucideCheckCircle" size="32" />
+        <p>Nenhuma tarefa concluída ainda.</p>
+        <span>As tarefas aparecem aqui assim que forem marcadas como feitas.</span>
+      </div>
+    } @else {
+      <ul class="list">
+        @for (entry of entries(); track entry.task.id) {
+          <li class="entry" [style.--accent]="entry.area.color">
+            <div class="entry-area">
+              <ng-icon [name]="entry.area.icon" size="13" />
+              <span>{{ entry.area.name }}</span>
+            </div>
+
+            <div class="entry-body">
+              <p class="entry-title">{{ entry.task.title }}</p>
+
+              <div class="entry-meta">
+                @if (entry.assignees.length > 0) {
+                  <div class="assignees">
+                    @for (m of entry.assignees; track m.id) {
+                      <span class="chip">{{ m.avatar }}</span>
+                    }
+                    <span class="names">
+                      {{ entry.assignees[0].name }}
+                      @if (entry.assignees.length === 2) {
+                        <span class="dim"> &amp; {{ entry.assignees[1].name }}</span>
+                      }
+                    </span>
+                  </div>
+                } @else {
+                  <span class="no-assignee">sem responsável</span>
+                }
+              </div>
+            </div>
+
+            <time class="entry-time" [attr.datetime]="entry.completedAt">
+              {{ entry.dateLabel }}
+            </time>
+          </li>
+        }
+      </ul>
+    }
+  </main>
+</div>

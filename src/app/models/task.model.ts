@@ -7,4 +7,4 @@ export interface Task {
   completedAt: number | null;
 }
 
-export const MAX_ASSIGNEES = 2;
+export const MAX_ASSIGNEES = Infinity;

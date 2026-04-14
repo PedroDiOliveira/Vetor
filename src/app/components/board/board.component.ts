@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { NgIconComponent } from '@ng-icons/core';
 import { COLUMNS } from '../../config/columns';
@@ -19,7 +19,7 @@ import { AssigneeDragData } from '../task-card/task-card.component';
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [NgIconComponent, ColumnComponent, TaskModalComponent, MemberPoolComponent, DashboardComponent, AddTaskModalComponent, AddMemberModalComponent],
+  imports: [NgIconComponent, RouterLink, ColumnComponent, TaskModalComponent, MemberPoolComponent, DashboardComponent, AddTaskModalComponent, AddMemberModalComponent],
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

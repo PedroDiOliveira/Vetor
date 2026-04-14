@@ -45,7 +45,7 @@
 
       <label class="mt">
         Responsáveis
-        <span class="counter">{{ assignees().length }}/{{ maxAssignees }}</span>
+        <span class="counter">{{ assignees().length }}</span>
       </label>
 
       <div class="assignees">
@@ -62,21 +62,17 @@
           </button>
         }
 
-        @if (canAddMore()) {
-          @for (m of availableMembers(); track m.id) {
-            <button
-              type="button"
-              class="assignee"
-              (click)="onToggleAssignee(m.id)"
-              title="Adicionar"
-            >
-              <app-assignee-chip [member]="m" accentColor="#6B7280" size="sm" />
-              <span>{{ m.name }}</span>
-              <ng-icon name="lucidePlus" size="12" />
-            </button>
-          }
-        } @else {
-          <p class="hint">Limite de {{ maxAssignees }} responsáveis atingido.</p>
+        @for (m of availableMembers(); track m.id) {
+          <button
+            type="button"
+            class="assignee"
+            (click)="onToggleAssignee(m.id)"
+            title="Adicionar"
+          >
+            <app-assignee-chip [member]="m" accentColor="#6B7280" size="sm" />
+            <span>{{ m.name }}</span>
+            <ng-icon name="lucidePlus" size="12" />
+          </button>
         }
       </div>
     </div>
