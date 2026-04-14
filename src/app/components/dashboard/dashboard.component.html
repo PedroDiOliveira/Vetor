@@ -1,0 +1,31 @@
+<div class="dash">
+  <div class="stat">
+    <span class="num">{{ ativas() }}</span>
+    <span class="label">Ativas</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="stat">
+    <span class="num">{{ concluidasSemana() }}</span>
+    <span class="label">Esta semana</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="stat">
+    <span class="num">{{ concluidasMes() }}</span>
+    <span class="label">Este mês</span>
+  </div>
+
+  @if (topContribuidor(); as top) {
+    <div class="divider"></div>
+    <div class="stat top">
+      <div class="avatar">{{ top.avatar }}</div>
+      <div>
+        <span class="num small">{{ top.name }}</span>
+        <span class="label">{{ top.count }} concluída{{ top.count !== 1 ? 's' : '' }} na semana</span>
+      </div>
+    </div>
+  }
+</div>

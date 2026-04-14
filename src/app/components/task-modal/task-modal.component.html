@@ -1,0 +1,108 @@
+<div class="overlay" (click)="onBackdrop($event)">
+  <section class="modal" [style.--accent]="areaMeta().color">
+    <header>
+      <div class="meta">
+        <span class="pill">
+          <ng-icon [name]="areaMeta().icon" size="11" />
+          <span>{{ areaMeta().name }}</span>
+        </span>
+        @if (isDone()) {
+          <span class="pill done">
+            <ng-icon name="lucideCheckCircle" size="11" />
+            <span>Concluída</span>
+          </span>
+        }
+      </div>
+      <button type="button" class="icon-btn" (click)="close.emit()" title="Fechar">
+        <ng-icon name="lucideX" size="16" />
+      </button>
+    </header>
+
+    <div class="body">
+      <label>Título</label>
+      <input
+        type="text"
+        [value]="title()"
+        (input)="title.set($any($event.target).value)"
+        placeholder="Descreva a tarefa"
+      />
+
+      <label class="mt">Área</label>
+      <div class="area-grid">
+        @for (c of columns; track c.id) {
+          <button
+            type="button"
+            class="area-option"
+            [class.active]="area() === c.id"
+            [style.--accent]="c.color"
+            (click)="area.set(c.id)"
+          >
+            <ng-icon [name]="c.icon" size="12" />
+            <span>{{ c.name }}</span>
+          </button>
+        }
+      </div>
+
+      <label class="mt">
+        Responsáveis
+        <span class="counter">{{ assignees().length }}/{{ maxAssignees }}</span>
+      </label>
+
+      <div class="assignees">
+        @for (m of assignees(); track m.id) {
+          <button
+            type="button"
+            class="assignee picked"
+            (click)="onToggleAssignee(m.id)"
+            title="Remover"
+          >
+            <app-assignee-chip [member]="m" [accentColor]="areaMeta().color" size="sm" />
+            <span>{{ m.name }}</span>
+            <ng-icon name="lucideX" size="12" />
+          </button>
+        }
+
+        @if (canAddMore()) {
+          @for (m of availableMembers(); track m.id) {
+            <button
+              type="button"
+              class="assignee"
+              (click)="onToggleAssignee(m.id)"
+              title="Adicionar"
+            >
+              <app-assignee-chip [member]="m" accentColor="#6B7280" size="sm" />
+              <span>{{ m.name }}</span>
+              <ng-icon name="lucidePlus" size="12" />
+            </button>
+          }
+        } @else {
+          <p class="hint">Limite de {{ maxAssignees }} responsáveis atingido.</p>
+        }
+      </div>
+    </div>
+
+    <footer>
+      <button type="button" class="ghost danger" (click)="onRemove()">
+        <ng-icon name="lucideTrash2" size="14" />
+        <span>Excluir</span>
+      </button>
+      <div class="right">
+        @if (isDone()) {
+          <button type="button" class="ghost" (click)="onReopen()">
+            <ng-icon name="lucideRotateCcw" size="14" />
+            <span>Reabrir</span>
+          </button>
+        } @else {
+          <button type="button" class="ghost" (click)="onComplete()">
+            <ng-icon name="lucideCheckCircle" size="14" />
+            <span>Concluir</span>
+          </button>
+        }
+        <button type="button" class="primary" (click)="onSave()">
+          <ng-icon name="lucideCheck" size="14" />
+          <span>Salvar</span>
+        </button>
+      </div>
+    </footer>
+  </section>
+</div>

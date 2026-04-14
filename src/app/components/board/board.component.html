@@ -1,19 +1,19 @@
 <div class="app">
+  <!-- Topbar -->
   <header class="topbar">
     <div class="brand">
       <div class="logo">
-        <ng-icon name="lucideArrowRight" size="14" />
+        <ng-icon name="lucideLayoutDashboard" size="14" />
       </div>
       <div>
         <h1>Team Board</h1>
-        <p class="sub">Vetor · {{ members().length }} <span>membros</span></p>
+        <p class="sub">Vetor · {{ tasks().length }} <span>tarefas</span></p>
       </div>
     </div>
-
     <div class="actions">
-      <button type="button" class="ghost" (click)="addMember()">
-        <ng-icon name="lucideUserPlus" size="14" />
-        <span>Membro</span>
+      <button type="button" class="ghost" (click)="addTask()">
+        <ng-icon name="lucidePlus" size="14" />
+        <span>Tarefa</span>
       </button>
       <button type="button" class="icon-btn" (click)="logout()" title="Sair">
         <ng-icon name="lucideLogOut" size="16" />
@@ -21,31 +21,43 @@
     </div>
   </header>
 
+  <!-- Dashboard strip -->
+  <app-dashboard />
+
+  <!-- Pool de membros disponíveis -->
+  <app-member-pool
+    [connectedTo]="poolAndTaskIds()"
+    (assigneeDropped)="onAssigneeDropped(null, $event)"
+    (addMember)="addMember()"
+    (removeMember)="removeMember($event)"
+  />
+
+  <!-- Board -->
   <main class="board">
-    @if (loading()) {
-      <div class="loading">
-        <ng-icon name="lucideLoader" size="18" class="spin" />
-        <span>Carregando board…</span>
-      </div>
-    } @else {
-      @for (col of columns; track col.id) {
-        <app-column
-          [column]="col"
-          [members]="membersOf(col.id)"
-          [connectedTo]="columnIds"
-          (dropped)="onDropped(col.id, $event)"
-          (memberClicked)="onMemberClick($event)"
-        />
-      }
+    @for (col of columns; track col.id) {
+      <app-column
+        [column]="col"
+        [tasks]="tasksOf(col.id)"
+        [connectedAreaIds]="areaIds"
+        [connectedTaskIds]="poolAndTaskIds()"
+        (taskDropped)="onTaskDropped(col.id, $event)"
+        (assigneeDropped)="onAssigneeDropped($event.container.id.replace('task-', ''), $event)"
+        (taskClicked)="openTask($event)"
+        (taskCompleted)="completeTask($event.id)"
+      />
     }
   </main>
 
-  @if (selected(); as m) {
-    <app-member-modal
-      [member]="m"
+  <!-- Task modal -->
+  @if (selectedTask(); as task) {
+    <app-task-modal
+      [task]="task"
       (close)="closeModal()"
-      (save)="saveDescription($event)"
-      (remove)="removeMember($event)"
+      (save)="saveTask($event)"
+      (complete)="completeTask($event)"
+      (reopen)="reopenTask($event)"
+      (remove)="removeTask($event)"
+      (toggleAssignee)="toggleAssignee($event)"
     />
   }
 </div>

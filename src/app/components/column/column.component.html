@@ -10,22 +10,26 @@
   <div
     class="list"
     cdkDropList
-    [cdkDropListData]="members()"
-    [cdkDropListConnectedTo]="connectedTo()"
-    [id]="column().id"
-    (cdkDropListDropped)="dropped.emit($event)"
+    [id]="areaDropId()"
+    [cdkDropListData]="tasks()"
+    [cdkDropListConnectedTo]="connectedAreaIds()"
+    (cdkDropListDropped)="taskDropped.emit($event)"
   >
-    @for (member of members(); track trackById($index, member)) {
-      <div cdkDrag [cdkDragData]="member">
-        <app-member-card
-          [member]="member"
-          (clicked)="memberClicked.emit($event)"
+    @for (task of tasks(); track trackById($index, task)) {
+      <div cdkDrag [cdkDragData]="task">
+        <app-task-card
+          [task]="task"
+          [accentColor]="column().color"
+          [connectedTo]="connectedTaskIds()"
+          (clicked)="taskClicked.emit($event)"
+          (completed)="taskCompleted.emit($event)"
+          (assigneeDropped)="assigneeDropped.emit($event)"
         />
       </div>
     }
 
-    <div class="empty">
-      <ng-icon name="lucidePlus" size="14" />
+    <div class="empty-hint">
+      <ng-icon name="lucidePlus" size="13" />
       <span>Arraste aqui</span>
     </div>
   </div>

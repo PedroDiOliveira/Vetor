@@ -8,20 +8,24 @@ import {
   lucideBookOpen,
   lucideCheck,
   lucideCircle,
+  lucideCheckCircle,
   lucideCode,
+  lucideFlag,
   lucideHeadphones,
   lucideLayers,
+  lucideLayoutDashboard,
+  lucideLoader,
+  lucideLock,
   lucideLogOut,
   lucidePencil,
   lucidePlus,
+  lucideRotateCcw,
   lucideServer,
   lucideTrash2,
-  lucideUsers,
+  lucideTrendingUp,
   lucideUserPlus,
-  lucideVideo,
-  lucideX,
-  lucideLock,
-  lucideLoader
+  lucideUsers,
+  lucideX
 } from '@ng-icons/lucide';
 import { routes } from './app.routes';
 
@@ -35,20 +39,24 @@ export const appConfig: ApplicationConfig = {
       lucideBookOpen,
       lucideCheck,
       lucideCircle,
+      lucideCheckCircle,
       lucideCode,
+      lucideFlag,
       lucideHeadphones,
       lucideLayers,
+      lucideLayoutDashboard,
+      lucideLoader,
+      lucideLock,
       lucideLogOut,
       lucidePencil,
       lucidePlus,
+      lucideRotateCcw,
       lucideServer,
       lucideTrash2,
-      lucideUsers,
+      lucideTrendingUp,
       lucideUserPlus,
-      lucideVideo,
-      lucideX,
-      lucideLock,
-      lucideLoader
+      lucideUsers,
+      lucideX
     })
   ]
 };

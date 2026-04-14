@@ -6,12 +6,10 @@ import {
   doc,
   onSnapshot,
   orderBy,
-  query,
-  updateDoc
+  query
 } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { Member } from '../models/member.model';
-import { DEFAULT_COLUMN } from '../config/columns';
 
 @Injectable({ providedIn: 'root' })
 export class MembersService {
@@ -30,8 +28,13 @@ export class MembersService {
       q,
       (snap) => {
         const items: Member[] = snap.docs.map((d) => {
-          const data = d.data() as Omit<Member, 'id'>;
-          return { id: d.id, ...data };
+          const data = d.data() as Partial<Member>;
+          return {
+            id: d.id,
+            name: data.name ?? '',
+            avatar: data.avatar ?? '?',
+            createdAt: data.createdAt ?? 0
+          };
         });
         this.members.set(items);
         this.loading.set(false);
@@ -48,21 +51,9 @@ export class MembersService {
     if (!trimmed) return;
     await addDoc(this.col, {
       name: trimmed,
-      column: DEFAULT_COLUMN,
-      description: '',
       avatar: trimmed.charAt(0).toUpperCase(),
       createdAt: Date.now()
     });
-  }
-
-  async updateColumn(id: string, column: string): Promise<void> {
-    this.optimistic(id, { column });
-    await updateDoc(doc(this.col, id), { column });
-  }
-
-  async updateDescription(id: string, description: string): Promise<void> {
-    this.optimistic(id, { description });
-    await updateDoc(doc(this.col, id), { description });
   }
 
   async remove(id: string): Promise<void> {
@@ -70,9 +61,7 @@ export class MembersService {
     await deleteDoc(doc(this.col, id));
   }
 
-  private optimistic(id: string, patch: Partial<Member>): void {
-    this.members.update((list) =>
-      list.map((m) => (m.id === id ? { ...m, ...patch } : m))
-    );
+  byId(id: string): Member | undefined {
+    return this.members().find((m) => m.id === id);
   }
 }

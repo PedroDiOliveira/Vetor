@@ -1,0 +1,91 @@
+:host { display: block; }
+
+.card {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--radius);
+  text-align: left;
+  cursor: grab;
+  transition: background 150ms, border-color 150ms, box-shadow 150ms;
+  min-height: 70px;
+
+  &:hover {
+    background: var(--card-hover);
+    border-color: var(--border-strong);
+    border-left-color: var(--accent);
+    box-shadow: var(--shadow-sm);
+
+    .done-btn { opacity: 1; }
+  }
+
+  &:active { cursor: grabbing; }
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  .title {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.35;
+    word-break: break-word;
+  }
+}
+
+.done-btn {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  opacity: 0;
+  transition: opacity 150ms, background 150ms, color 150ms;
+
+  &:hover {
+    background: color-mix(in srgb, #10B981 14%, transparent);
+    color: #10B981;
+  }
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 22px;
+}
+
+.chips {
+  display: flex;
+  align-items: center;
+  gap: 0;
+
+  .chip-wrap + .chip-wrap {
+    margin-left: -6px;
+  }
+
+  .chip-wrap {
+    display: inline-flex;
+    cursor: grab;
+
+    &:active { cursor: grabbing; }
+  }
+
+  .empty {
+    font-size: 11px;
+    color: var(--text-faint);
+    font-style: italic;
+  }
+}

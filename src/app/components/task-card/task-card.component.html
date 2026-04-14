@@ -1,0 +1,41 @@
+<button
+  type="button"
+  class="card"
+  cdkDropList
+  [id]="dropListId()"
+  [cdkDropListData]="task()"
+  [cdkDropListConnectedTo]="connectedTo()"
+  cdkDropListOrientation="horizontal"
+  (cdkDropListDropped)="assigneeDropped.emit($event)"
+  (click)="onClick($event)"
+>
+  <div class="head">
+    <p class="title">{{ task().title }}</p>
+    <button
+      type="button"
+      class="done-btn"
+      data-action
+      (click)="onComplete($event)"
+      title="Concluir"
+    >
+      <ng-icon name="lucideCheck" size="14" />
+    </button>
+  </div>
+
+  <div class="foot">
+    <div class="chips">
+      @for (a of assignees(); track a.id) {
+        <span
+          class="chip-wrap"
+          data-chip
+          cdkDrag
+          [cdkDragData]="buildDragData(a.id)"
+        >
+          <app-assignee-chip [member]="a" [accentColor]="accentColor()" size="sm" />
+        </span>
+      } @empty {
+        <span class="empty">sem responsáveis</span>
+      }
+    </div>
+  </div>
+</button>

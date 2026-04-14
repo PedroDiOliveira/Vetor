@@ -1,0 +1,24 @@
+:host { display: inline-flex; }
+
+.chip {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  border: 1.5px solid color-mix(in srgb, var(--accent) 35%, var(--surface));
+  box-shadow: 0 0 0 2px var(--card);
+  user-select: none;
+
+  &.sm {
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+    border-width: 1px;
+  }
+}

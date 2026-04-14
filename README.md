@@ -1,6 +1,6 @@
 # Vetor
 
-Vetor é um board de alocação em tempo real que construí para gerir a equipe de engenharia que lidero no desenvolvimento de um SaaS. Como gestor, precisava de uma forma rápida e honesta de visualizar onde cada pessoa está atuando agora — desenvolvimento, suporte, reunião, estudo, infraestrutura — sem reuniões de status, sem planilhas, sem ferramentas pesadas. O Vetor é a resposta a essa necessidade: um único board kanban, drag-and-drop, sincronizado em tempo real entre toda a equipe.
+Vetor é um board de alocação em tempo real que construí para gerir a equipe de engenharia que lidero no desenvolvimento de um SaaS. Como gestor, precisava de uma forma rápida e honesta de visualizar onde cada pessoa está atuando agora — desenvolvimento, suporte, estudo, infraestrutura — sem reuniões de status, sem planilhas, sem ferramentas pesadas. O Vetor é a resposta a essa necessidade: um único board kanban, drag-and-drop, sincronizado em tempo real entre toda a equipe.
 
 O projeto também é um exercício deliberado de execução: front-end moderno em Angular 17, backend zero, sincronização realtime via Firestore, deploy contínuo no Vercel, e um padrão de design intencionalmente minimalista. Da decisão arquitetural ao último detalhe de tipografia, tudo aqui é uma escolha consciente.
 
@@ -43,7 +43,7 @@ interface Member {
 }
 ```
 
-As 8 colunas (Desenvolvimento, Comercial, Infra, Estudo, Reunião, Suporte, Gestão, Disponível) são fixas e ficam declaradas em [src/app/config/columns.ts](src/app/config/columns.ts) — fonte única da verdade para id, label, ícone e cor de destaque.
+As 7 colunas (Desenvolvimento, Comercial, Infra, Estudo, Suporte, Gestão, Disponível) são fixas e ficam declaradas em [src/app/config/columns.ts](src/app/config/columns.ts) — fonte única da verdade para id, label, ícone e cor de destaque.
 
 ## Estrutura
 

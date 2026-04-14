@@ -1,0 +1,39 @@
+<div class="pool-bar">
+  <div class="label">
+    <ng-icon name="lucideUsers" size="13" />
+    <span>Disponíveis</span>
+    <span class="count">{{ free().length }}</span>
+  </div>
+
+  <div
+    class="chips"
+    cdkDropList
+    [id]="poolId"
+    [cdkDropListData]="free()"
+    [cdkDropListConnectedTo]="connectedTo()"
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="assigneeDropped.emit($event)"
+  >
+    @for (m of free(); track m.id) {
+      <div class="chip-wrap" cdkDrag [cdkDragData]="buildDragData(m.id)">
+        <app-assignee-chip [member]="m" size="md" />
+        <span class="name">{{ m.name }}</span>
+        <button
+          type="button"
+          class="rm"
+          (click)="onRemove($event, m)"
+          title="Remover membro"
+        >
+          <ng-icon name="lucideX" size="10" />
+        </button>
+      </div>
+    } @empty {
+      <span class="hint">Todos alocados</span>
+    }
+  </div>
+
+  <button type="button" class="add-btn" (click)="addMember.emit()" title="Adicionar membro">
+    <ng-icon name="lucideUserPlus" size="14" />
+    <span>Membro</span>
+  </button>
+</div>

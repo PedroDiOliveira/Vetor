@@ -116,7 +116,7 @@ Coleção: `members`
 ```
 {
   name:        string,   // "Pedro"
-  column:      string,   // "desenvolvimento" | "comercial" | "infra" | "estudo" | "reuniao" | "suporte" | "gestao" | "disponivel"
+  column:      string,   // "desenvolvimento" | "comercial" | "infra" | "estudo" | "suporte" | "gestao" | "disponivel"
   description: string,   // texto livre do que está fazendo
   avatar:      string,   // primeira letra do nome em maiúsculo
   createdAt:   number    // timestamp em ms

@@ -1,0 +1,120 @@
+:host { display: block; }
+
+.pool-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 22px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  min-height: 52px;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-faint);
+
+  ng-icon { color: var(--text-faint); }
+
+  .count {
+    font-family: var(--font-mono);
+    background: var(--card);
+    padding: 1px 6px;
+    border-radius: 5px;
+  }
+}
+
+.chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-height: 32px;
+  padding: 4px 8px;
+  border: 1px dashed transparent;
+  border-radius: var(--radius);
+  transition: border-color 150ms, background 150ms;
+
+  &.cdk-drop-list-receiving {
+    border-color: var(--border-strong);
+    background: var(--card);
+  }
+
+  .hint {
+    font-size: 12px;
+    color: var(--text-faint);
+    font-style: italic;
+  }
+}
+
+.chip-wrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 8px 3px 3px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  cursor: grab;
+  transition: border-color 150ms, background 150ms;
+
+  &:hover {
+    border-color: var(--border-strong);
+    background: var(--card-hover);
+  }
+
+  &:active { cursor: grabbing; }
+
+  .name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .rm {
+    width: 16px;
+    height: 16px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--text-faint);
+    opacity: 0;
+    transition: opacity 150ms, background 150ms, color 150ms;
+  }
+
+  &:hover .rm {
+    opacity: 1;
+    &:hover {
+      background: rgba(239, 68, 68, 0.12);
+      color: #EF4444;
+    }
+  }
+}
+
+.add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: background 150ms, color 150ms, border-color 150ms;
+
+  &:hover {
+    background: var(--card);
+    color: var(--text);
+  }
+}

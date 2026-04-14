@@ -11,7 +11,6 @@ export const COLUMNS: BoardColumn[] = [
   { id: 'comercial',       name: 'Comercial',       icon: 'lucideBarChart',   color: '#F59E0B', cssVar: '--col-comercial' },
   { id: 'infra',           name: 'Infra',           icon: 'lucideServer',     color: '#10B981', cssVar: '--col-infra' },
   { id: 'estudo',          name: 'Estudo',          icon: 'lucideBookOpen',   color: '#8B5CF6', cssVar: '--col-estudo' },
-  { id: 'reuniao',         name: 'Reunião',         icon: 'lucideVideo',      color: '#EC4899', cssVar: '--col-reuniao' },
   { id: 'suporte',         name: 'Suporte',         icon: 'lucideHeadphones', color: '#F97316', cssVar: '--col-suporte' },
   { id: 'gestao',          name: 'Gestão',          icon: 'lucideLayers',     color: '#06B6D4', cssVar: '--col-gestao' },
   { id: 'disponivel',      name: 'Disponível',      icon: 'lucideCircle',     color: '#6B7280', cssVar: '--col-disponivel' }
